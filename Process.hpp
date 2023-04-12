@@ -1,5 +1,5 @@
 #ifndef	PROCESS_HPP
-#define	PROCESS_CPP
+#define	PROCESS_HPP
 
 #include <string>
 #include <iostream>
