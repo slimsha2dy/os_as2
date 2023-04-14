@@ -7,7 +7,6 @@ Process::Process()
 
 Process::~Process()
 {
-
 }
 
 Process::Process(string pname)
@@ -31,6 +30,7 @@ Process::Process(string pname)
 
 	this->code = new string[length];
 	for (int i = 0; i < length; i++) {
+		getline(file, line);
 		this->code[i] = line;
 	}
 }
@@ -72,10 +72,7 @@ string	Process::readCommand(void)
 	if (command[0] == "run")
 	{
 		this->run(command[1]);
-		return (command[0]);
 	}
-	else if (command[0] == "exit")
-		return (command[0]);
 	return (command[0]);
 }
 
@@ -86,4 +83,9 @@ void	Process::run(string arg)
 	this->runtime--;
 	if (runtime == 0)
 		this->pc++;
+}
+
+string	Process::getPstate(void) const
+{
+	return (this->pstate);
 }

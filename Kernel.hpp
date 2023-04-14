@@ -14,10 +14,10 @@ class	Kernel
 		Process	*newProcess;	// new process in cycle
 		Process	*terProcess;	// terminated process in cycle
 
-		string	mode;
-		string	kstate;		// state of kernel (boot, syscall, schedule, idle)
-		bool	syscallFlag;
-		string	syscallCommand;
+		string	mode;		// kernel/user
+		string	kstate;		// state of kernel (boot, system call, schedule, idle)
+		bool	syscallFlag;	// if process call syscall
+		string	syscallCommand;	// syscall command
 		int		last_pid;
 		bool	allExit;	// if all processes exited
 
@@ -27,6 +27,7 @@ class	Kernel
 
 		void	changeKstate(const string kstate);
 		bool	getSysflag(void) const;
+		bool	getallExit(void) const;
 
 		void	updateState(void);	// 2. update processes state
 		void	updateRq(void);		// 3. update readyqueue
@@ -35,7 +36,6 @@ class	Kernel
 		void	printState(void) const;	// 5. print state
 		void	checkSyscall(void);	// check if user call syscall
 		void	syscall(void);
-		bool	getallExit(void) const;
 };
 
 #endif

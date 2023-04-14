@@ -29,6 +29,7 @@ class	Process
 		void	changeState(const string state);
 		void	addNext(Process *next);
 		Process	*getNext(void) const;
+		string	getPstate(void) const;
 		void	printInfo(void) const; // print "pid(pname, ppid)"
 		
 		string	readCommand(void);

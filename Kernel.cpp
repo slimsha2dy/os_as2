@@ -19,21 +19,26 @@ Kernel::Kernel(string pname)
 
 Kernel::~Kernel(void)
 {
+	if (this->terProcess)
+		delete this->terProcess;
 }
 
-void	Kernel::changeKstate(const string kstate)
+void	Kernel::checkSyscall(void)
 {
-	this->kstate = kstate;
+	this->mode = "kernel";
+	this->kstate = "syscall";
 }
 
 void	Kernel::updateState(void)
 {
-	if (this->newProcess)	// change state of new process
+	// change state of new process
+	if (this->newProcess)
 		(this->newProcess)->changeState("ready");
 
-	if (this->terProcess)	// delete terminated process
+	// delete terminated process
+	if (this->terProcess)
 	{
-		delete this->terProcess;	// delete terminated process
+		delete this->terProcess;
 		this->terProcess = 0;
 	}
 }
@@ -55,17 +60,20 @@ void	Kernel::updateRq(void)
 
 void	Kernel::excute(void)
 {
-	if (this->syscallFlag)
+	if (this->syscallFlag)	// system call command
 	{
-		this->mode = "system call";
 		syscall();
+		return ;
 	}
-	if (!this->tmp)
+
+	else if (!this->tmp)	// schedule or idle
 	{
+		this->mode = "kernel";
 		this->scheduleIdle();
 		return ;
 	}
 
+	// running process command
 	this->mode = "user";
 	string command = (this->tmp)->readCommand();
 	if (command == "exit")
@@ -86,44 +94,10 @@ void	Kernel::scheduleIdle(void)
 	// scheduler action
 	this->changeKstate("schedule");
 	this->tmp = this->headRq;
+	if (this->headRq == this->tailRq)
+		this->tailRq = 0;
 	this->headRq = (this->headRq)->getNext();
 	(this->tmp)->changeState("running");
-}
-
-void	Kernel::printState(void) const
-{
-	cout << "1. mode: " << this->mode << endl;
-	cout << "2. command: " << this->kstate << endl;
-	cout << "3. running: ";
-	if (this->tmp)
-		(this->tmp)->printInfo();
-	else
-		cout << "none" << endl;
-
-	cout << "4. ready: none" << endl;
-	cout << "5. wating : none" << endl;
-	cout << "6. new: ";
-	if (this->newProcess)	// if there is new process
-		(this->newProcess)->printInfo();
-	else
-		cout << "none" << endl;
-
-	cout << "7. terminated: ";
-	if (this->terProcess)	// if there is terminated process
-		(this->terProcess)->printInfo();
-	else
-		cout << "none" << endl;
-}
-
-void	Kernel::checkSyscall(void)
-{
-	this->mode = "kernel";
-	this->kstate = "syscall";
-}
-
-bool	Kernel::getSysflag(void) const
-{
-	return (this->syscallFlag);
 }
 
 void	Kernel::syscall(void)
@@ -133,13 +107,7 @@ void	Kernel::syscall(void)
 		this->terProcess = this->tmp;
 		this->tmp = 0;
 		this->allExit = 1;
-		delete this->terProcess;
 	}
 
 	this->syscallFlag = 0;
-}
-
-bool	Kernel::getallExit(void) const
-{
-	return (this->allExit);
 }
