@@ -48,12 +48,7 @@ void	Kernel::updateRq(void)
 	// new process to readyqueue
 	if (this->newProcess)
 	{
-		if (!this->headRq)
-			this->headRq = this->newProcess;
-		if (!this->tailRq)
-			this->tailRq = this->newProcess;
-		else
-			(this->tailRq)->addNext(this->newProcess);
+		this->pushRq(this->newProcess);
 		this->newProcess = 0;
 	}
 }
@@ -62,6 +57,7 @@ void	Kernel::excute(void)
 {
 	if (this->syscallFlag)	// system call command
 	{
+		this->mode = "kernel";
 		syscall();
 		return ;
 	}
@@ -93,10 +89,7 @@ void	Kernel::scheduleIdle(void)
 
 	// scheduler action
 	this->changeKstate("schedule");
-	this->tmp = this->headRq;
-	if (this->headRq == this->tailRq)
-		this->tailRq = 0;
-	this->headRq = (this->headRq)->getNext();
+	this->tmp = this->popRq();
 	(this->tmp)->changeState("running");
 }
 

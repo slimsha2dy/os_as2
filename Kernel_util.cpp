@@ -23,7 +23,7 @@ void	Kernel::printState(void) const
 	if (this->mode == "kernel")
 		cout << this->kstate << endl;
 	else
-		cout << (this->tmp)->getPstate() << endl;
+		cout << (this->tmp)->getCommand() << endl;
 
 	cout << "3. running: ";
 	if (this->tmp)
@@ -44,4 +44,23 @@ void	Kernel::printState(void) const
 		(this->terProcess)->printInfo();
 	else
 		cout << "none" << endl;
+}
+
+void	Kernel::pushRq(Process *p)
+{
+	if (!this->headRq)
+		this->headRq = p;
+	if (!this->tailRq)
+		this->tailRq = p;
+	else
+		(this->tailRq)->addNext(p);
+}
+
+Process	*Kernel::popRq(void)
+{
+	Process	*tmp = this->headRq;
+	if (this->headRq == this->tailRq)
+		this->tailRq = 0;
+	this->headRq = (this->headRq)->getNext();
+	return (tmp);
 }

@@ -35,32 +35,6 @@ Process::Process(string pname)
 	}
 }
 
-int	Process::getPid(void) const
-{
-	return (this->pid);
-}
-
-void	Process::changeState(const string state)
-{
-	this->pstate = state;
-}
-
-void	Process::addNext(Process *next)
-{
-	this->next = next;
-}
-
-Process	*Process::getNext(void) const
-{
-	return (this->next);
-}
-
-void	Process::printInfo(void) const
-{
-	cout << this->pid << "(" << this->pname << ", " << this->ppid \
-		<< ")" << endl;
-}
-
 string	Process::readCommand(void)
 {
 	string	command[2];
@@ -69,15 +43,21 @@ string	Process::readCommand(void)
 	ss >> command[0];
 	ss >> command[1];
 
+	this->tmpCode = this->code[this->pc];
 	if (command[0] == "run")
 	{
 		this->run(command[1]);
+	}
+	if (command[0] == "exit")
+	{
+		this->exit();
 	}
 	return (command[0]);
 }
 
 void	Process::run(string arg)
 {
+	this->pstate = "running";
 	if (runtime == 0)
 		this->runtime = stoi(arg);
 	this->runtime--;
@@ -85,7 +65,7 @@ void	Process::run(string arg)
 		this->pc++;
 }
 
-string	Process::getPstate(void) const
+void	Process::exit(void)
 {
-	return (this->pstate);
+	this->pstate = "terminate";
 }

@@ -25,17 +25,21 @@ class	Kernel
 		Kernel(string pname);
 		~Kernel(void);
 
-		void	changeKstate(const string kstate);
-		bool	getSysflag(void) const;
-		bool	getallExit(void) const;
-
+		// Kernel.cpp
+		void	checkSyscall(void);	// check if user call syscall
 		void	updateState(void);	// 2. update processes state
 		void	updateRq(void);		// 3. update readyqueue
 		void	excute(void);		// 4. excute command
 		void	scheduleIdle(void);	// excute scheduler or idle
-		void	printState(void) const;	// 5. print state
-		void	checkSyscall(void);	// check if user call syscall
 		void	syscall(void);
+
+		// Kernel_util.cpp
+		void	changeKstate(const string kstate);
+		bool	getSysflag(void) const;
+		bool	getallExit(void) const;
+		void	printState(void) const;	// 5. print state
+		void	pushRq(Process *p);
+		Process	*popRq(void);
 };
 
 #endif
