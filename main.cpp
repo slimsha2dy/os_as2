@@ -12,6 +12,7 @@ int	main(int argc, char **argv)
 	{		
 		if (kernel.getSysflag())
 			kernel.checkSyscall();
+		kernel.updateSleep();
 		kernel.updateState();
 		kernel.updateRq();
 		kernel.excute();

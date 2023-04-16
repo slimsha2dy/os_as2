@@ -26,6 +26,16 @@ void	Process::printInfo(void) const
 		<< ")" << endl;
 }
 
+void	Process::printWait(void) const
+{
+	cout << " " << this->pid << "(";
+	if (this->tmpCode == "wait")
+		cout << "W";
+	else
+		cout << "S";
+	cout << ")";
+}
+
 string	Process::getPstate(void) const
 {
 	return (this->pstate);
@@ -34,4 +44,14 @@ string	Process::getPstate(void) const
 string	Process::getCommand(void) const
 {
 	return (this->tmpCode);
+}
+
+void	Process::subSleep(void)
+{
+	this->sleeptime--;
+}
+
+int	Process::getSleep(void)
+{
+	return (this->sleeptime);
 }

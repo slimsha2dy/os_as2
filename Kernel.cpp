@@ -26,11 +26,37 @@ Kernel::~Kernel(void)
 void	Kernel::checkSyscall(void)
 {
 	this->mode = "kernel";
-	this->kstate = "syscall";
+	this->kstate = "system call";
+	if (this->syscallCommand == "sleep")
+	{
+		(this->tmp)->changeState("waiting");
+		this->pushWq(this->tmp);
+		this->tmp = 0;
+	}
+}
+
+void	Kernel::updateSleep(void)
+{
+	Process	*tmp = this->headWq;
+	while (tmp)
+	{
+		if (tmp->getSleep() > 0)	// if process sleeping
+			tmp->subSleep();
+		tmp = tmp->getNext();
+	}
 }
 
 void	Kernel::updateState(void)
 {
+	// change state of process on readyqueue
+	Process	*tmp = this->headWq;
+	while (tmp)
+	{
+		if (tmp->getSleep() == 0)
+			tmp->changeState("ready");
+		tmp = tmp->getNext();
+	}
+
 	// change state of new process
 	if (this->newProcess)
 		(this->newProcess)->changeState("ready");
@@ -45,6 +71,14 @@ void	Kernel::updateState(void)
 
 void	Kernel::updateRq(void)
 {
+	// waiting queue to readyqueue
+	Process	*tmp = this->headWq;
+	while (tmp)
+	{
+		if (tmp->getSleep() == 0)
+			this->pushRq(this->popWq(tmp));
+		tmp = tmp->getNext();
+	}
 	// new process to readyqueue
 	if (this->newProcess)
 	{
@@ -72,7 +106,7 @@ void	Kernel::excute(void)
 	// running process command
 	this->mode = "user";
 	string command = (this->tmp)->readCommand();
-	if (command == "exit")
+	if (command == "exit" || command == "sleep")
 	{
 		this->syscallFlag = 1;
 		this->syscallCommand = command;

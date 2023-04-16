@@ -7,6 +7,7 @@ Process::Process()
 
 Process::~Process()
 {
+	delete[] this->code;
 }
 
 Process::Process(string pname)
@@ -18,6 +19,7 @@ Process::Process(string pname)
 	this->next = 0;
 	this->pc = 0;
 	this->runtime = 0;
+	this->sleeptime = 0;
 
 	ifstream	file(pname);
 	int	length = 0;				// number of lines in the file(pname)
@@ -52,20 +54,31 @@ string	Process::readCommand(void)
 	{
 		this->exit();
 	}
+	if (command[0] == "sleep")
+	{
+		this->sleep(command[1]);
+	}
 	return (command[0]);
 }
 
 void	Process::run(string arg)
 {
 	this->pstate = "running";
-	if (runtime == 0)
+	if (this->runtime == 0)
 		this->runtime = stoi(arg);
 	this->runtime--;
-	if (runtime == 0)
+	if (this->runtime == 0)
 		this->pc++;
 }
 
 void	Process::exit(void)
 {
 	this->pstate = "terminate";
+}
+
+
+void	Process::sleep(string arg)
+{
+	this->sleeptime = stoi(arg);
+	this->pc++;
 }

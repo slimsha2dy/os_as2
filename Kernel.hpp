@@ -27,6 +27,7 @@ class	Kernel
 
 		// Kernel.cpp
 		void	checkSyscall(void);	// check if user call syscall
+		void	updateSleep(void);	// 1. update sleep time
 		void	updateState(void);	// 2. update processes state
 		void	updateRq(void);		// 3. update readyqueue
 		void	excute(void);		// 4. excute command
@@ -40,6 +41,9 @@ class	Kernel
 		void	printState(void) const;	// 5. print state
 		void	pushRq(Process *p);
 		Process	*popRq(void);
+		void	pushWq(Process *p);
+		Process	*popWq(void);
+		Process	*popWq(Process *p);	// pop process in the middle of the queue
 };
 
 #endif
