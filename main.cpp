@@ -5,7 +5,6 @@ int	main(int argc, char **argv)
 	Kernel	kernel(argv[1]);
 	cout << "[cycle #0]" << endl;
 	kernel.printState();
-	cout << endl;
 
 	int	cycle = 1;
 	while (!kernel.getallExit())
@@ -18,7 +17,6 @@ int	main(int argc, char **argv)
 		kernel.excute();
 		cout << "[cycle #" << cycle << "]" << endl;
 		kernel.printState();
-		cout << endl;
 		++cycle;
 	}
 	return (0);

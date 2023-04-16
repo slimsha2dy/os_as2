@@ -77,6 +77,7 @@ void	Kernel::printState(void) const
 		(this->terProcess)->printInfo();
 	else
 		cout << "none" << endl;
+	cout << endl;
 }
 
 void	Kernel::pushRq(Process *p)
