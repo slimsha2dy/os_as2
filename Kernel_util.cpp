@@ -15,74 +15,74 @@ bool	Kernel::getallExit(void) const
 	return (this->exitCount == this->last_pid);
 }
 
-void	Kernel::printState(void) const
+void	Kernel::printState(ofstream &ofile) const
 {
 	// 1. mode
-	cout << "1. mode: " << this->mode << endl;
+	ofile << "1. mode: " << this->mode << endl;
 
 	// 2. command
-	cout << "2. command: " ;
+	ofile << "2. command: " ;
 	if (this->mode == "kernel")
-		cout << this->kstate << endl;
+		ofile << this->kstate << endl;
 	else
 	{
-		cout << (this->tmp)->getCommand();
+		ofile << (this->tmp)->getCommand();
 		if ((this->tmp)->getCommand() != "exit" && (this->tmp)->getCommand() != "wait")
-			cout << " " << (this->tmp)->getArgument();
-		cout << endl;
+			ofile << " " << (this->tmp)->getArgument();
+		ofile << endl;
 	}
 
 	// 3. running
-	cout << "3. running: ";
+	ofile << "3. running: ";
 	if (this->tmp)
-		(this->tmp)->printInfo();
+		(this->tmp)->printInfo(ofile);
 	else
-		cout << "none" << endl;
+		ofile << "none" << endl;
 
 	// 4. ready
-	cout << "4. ready:";
+	ofile << "4. ready:";
 	if (this->headRq)
 	{
 		Process *tmp = this->headRq;
 		while (tmp)
 		{
-			cout << " " << tmp->getPid();
+			ofile << " " << tmp->getPid();
 			tmp = tmp->getNext();
 		}
-		cout << endl;
+		ofile << endl;
 	}
 	else
-		cout << " none" << endl;
+		ofile << " none" << endl;
 
 	// 5. waiting
-	cout << "5. waiting:";
+	ofile << "5. waiting:";
 	if (this->headWq)		// if there is wating process
 	{
 		Process	*tmp = this->headWq;
 		while (tmp)
 		{
-			tmp->printWait();
+			tmp->printWait(ofile);
 			tmp = tmp->getNext();
 		}
-		cout << endl;
+		ofile << endl;
 	}
 	else
-		cout << " none" << endl;
+		ofile << " none" << endl;
 
 	// 6. new
-	cout << "6. new: ";
+	ofile << "6. new: ";
 	if (this->newProcess)	// if there is new process
-		(this->newProcess)->printInfo();
+		(this->newProcess)->printInfo(ofile);
 	else
-		cout << "none" << endl;
+		ofile << "none" << endl;
 
 	// 7. terminated
-	cout << "7. terminated: ";
+	ofile << "7. terminated: ";
 	if (this->terProcess)	// if there is terminated process
-		(this->terProcess)->printInfo();
+		(this->terProcess)->printInfo(ofile);
 	else
-		cout << "none" << endl;
-	cout << endl;
+		ofile << "none" << endl;
+	ofile << endl;
 }
 
 void	Kernel::pushRq(Process *p)
@@ -103,7 +103,6 @@ Process	*Kernel::popRq(void)
 {
 	if (this->headRq == 0)
 	{
-		cout << "Pop error" << endl;
 		return (0);
 	}
 	Process	*tmp = this->headRq;
@@ -132,7 +131,6 @@ Process	*Kernel::popWq(void)
 {
 	if (this->headWq == 0)
 	{
-		cout << "Pop error" << endl;
 		return (0);
 	}
 	Process	*tmp = this->headWq;
@@ -149,7 +147,7 @@ Process	*Kernel::popWq(Process *p)
 	Process	*ret;
 	if (tmp == p)
 		return (this->popWq());
-	while (tmp->getNext() == p)		// tmp is before p
+	while (tmp->getNext() != p)		// tmp is before p
 		tmp = tmp->getNext();
 	ret = tmp->getNext();			// ret = p
 	tmp->addNext(ret->getNext());	// a-(p)-b -> a-b

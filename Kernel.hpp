@@ -40,7 +40,7 @@ class	Kernel
 		void	changeKstate(const string kstate);
 		bool	getSysflag(void) const;
 		bool	getallExit(void) const;
-		void	printState(void) const;	// 5. print state
+		void	printState(ofstream &ofile) const;	// 5. print state
 		void	pushRq(Process *p);
 		Process	*popRq(void);
 		void	pushWq(Process *p);

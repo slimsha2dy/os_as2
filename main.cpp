@@ -4,8 +4,10 @@ int	main(int argc, char **argv)
 {
 	string	str = argv[1];
 	Kernel	kernel(str);
-	cout << "[cycle #0]" << endl;
-	kernel.printState();
+	ofstream	ofile;
+	ofile.open("result", std::ios::out);
+	ofile << "[cycle #0]" << endl;
+	kernel.printState(ofile);
 
 	int	cycle = 1;
 	while (!kernel.getallExit())
@@ -16,8 +18,8 @@ int	main(int argc, char **argv)
 		kernel.updateState();
 		kernel.updateRq();
 		kernel.excute();
-		cout << "[cycle #" << cycle << "]" << endl;
-		kernel.printState();
+		ofile << "[cycle #" << cycle << "]" << endl;
+		kernel.printState(ofile);
 		++cycle;
 	}
 	return (0);

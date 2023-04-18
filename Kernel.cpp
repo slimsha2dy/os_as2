@@ -77,8 +77,13 @@ void	Kernel::updateRq(void)
 	while (tmp)
 	{
 		if (tmp->getSleep() == 0)
-			this->pushRq(this->popWq(tmp));
-		tmp = tmp->getNext();
+		{
+			Process	*buf = tmp;
+			tmp = tmp->getNext();
+			this->pushRq(this->popWq(buf));
+		}
+		else
+			tmp = tmp->getNext();
 	}
 	// new process to readyqueue
 	if (this->newProcess)
@@ -137,7 +142,11 @@ void	Kernel::syscall(void)
 		while (tmp)	// if there is waiting parent, take off the waiting
 		{
 			if ((this->tmp)->getPpid() == tmp->getPid() && tmp->getSleep() == -1)
+			{
 				tmp->changeSleep(0);
+				this->pushRq(this->popWq(tmp));
+				break;
+			}
 			tmp = tmp->getNext();
 		}
 		this->terProcess = this->tmp;
@@ -182,6 +191,7 @@ void	Kernel::wait(void)
 			is_child = 1;
 			break;
 		}
+		tmp = tmp->getNext();
 	}
 	if (is_child)	// if there is child process, push to waiting queue
 	{

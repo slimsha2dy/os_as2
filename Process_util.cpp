@@ -25,20 +25,20 @@ Process	*Process::getNext(void) const
 	return (this->next);
 }
 
-void	Process::printInfo(void) const
+void	Process::printInfo(ofstream &ofile) const
 {
-	cout << this->pid << "(" << this->pname << ", " << this->ppid \
+	ofile << this->pid << "(" << this->pname << ", " << this->ppid \
 		<< ")" << endl;
 }
 
-void	Process::printWait(void) const
+void	Process::printWait(ofstream &ofile) const
 {
-	cout << " " << this->pid << "(";
+	ofile << " " << this->pid << "(";
 	if (this->tmpCode[0] == "wait")
-		cout << "W";
+		ofile << "W";
 	else
-		cout << "S";
-	cout << ")";
+		ofile << "S";
+	ofile << ")";
 }
 
 string	Process::getPstate(void) const

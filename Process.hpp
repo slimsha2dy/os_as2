@@ -40,8 +40,8 @@ class	Process
 		void	changeState(const string state);
 		void	addNext(Process *next);
 		Process	*getNext(void) const;	// get next process on queue
-		void	printInfo(void) const;	// print "pid(pname, ppid)"
-		void	printWait(void) const;	// print "pid(S/W)"
+		void	printInfo(ofstream &ofile) const;	// print "pid(pname, ppid)"
+		void	printWait(ofstream &ofile) const;	// print "pid(S/W)"
 		string	getPstate(void) const;
 		string	getCommand(void) const;
 		string	getArgument(void) const;
