@@ -88,15 +88,24 @@ void	Kernel::printState(void) const
 void	Kernel::pushRq(Process *p)
 {
 	if (!this->headRq)
+	{
 		this->headRq = p;
-	if (!this->tailRq)
 		this->tailRq = p;
+	}
 	else
+	{
 		(this->tailRq)->addNext(p);
+		this->tailRq = p;
+	}
 }
 
 Process	*Kernel::popRq(void)
 {
+	if (this->headRq == 0)
+	{
+		cout << "Pop error" << endl;
+		return (0);
+	}
 	Process	*tmp = this->headRq;
 	if (this->headRq == this->tailRq)
 		this->tailRq = 0;
@@ -108,15 +117,24 @@ Process	*Kernel::popRq(void)
 void	Kernel::pushWq(Process *p)
 {
 	if (!this->headWq)
+	{
 		this->headWq = p;
-	if (!this->tailWq)
 		this->tailWq = p;
+	}
 	else
+	{
 		(this->tailWq)->addNext(p);
+		this->tailWq = p;
+	}
 }
 
 Process	*Kernel::popWq(void)
 {
+	if (this->headWq == 0)
+	{
+		cout << "Pop error" << endl;
+		return (0);
+	}
 	Process	*tmp = this->headWq;
 	if (this->headWq == this->tailWq)
 		this->tailWq = 0;

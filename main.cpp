@@ -8,8 +8,7 @@ int	main(int argc, char **argv)
 	kernel.printState();
 
 	int	cycle = 1;
-//	while (!kernel.getallExit())
-	while (cycle < 23)
+	while (!kernel.getallExit())
 	{		
 		if (kernel.getSysflag())
 			kernel.checkSyscall();
