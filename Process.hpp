@@ -26,7 +26,7 @@ class	Process
 		Process();
 		~Process();
 		Process(string pname);
-		Process(string pname, int pid, int ppid);
+		Process(string input, string pname, int pid, int ppid);
 
 		// Process.cpp
 		string	readCommand(void);
@@ -36,15 +36,18 @@ class	Process
 		
 		// Process_util.cpp
 		int		getPid(void) const;
+		int		getPpid(void) const;
 		void	changeState(const string state);
 		void	addNext(Process *next);
 		Process	*getNext(void) const;	// get next process on queue
 		void	printInfo(void) const;	// print "pid(pname, ppid)"
 		void	printWait(void) const;	// print "pid(S/W)"
 		string	getPstate(void) const;
-		string	*getCommand(void);
+		string	getCommand(void) const;
+		string	getArgument(void) const;
 		void	subSleep(void);	
 		int		getSleep(void);
+		void	changeSleep(int time);
 };
 
 #endif

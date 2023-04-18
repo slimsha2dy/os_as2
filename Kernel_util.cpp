@@ -26,9 +26,9 @@ void	Kernel::printState(void) const
 		cout << this->kstate << endl;
 	else
 	{
-		cout << (this->tmp)->getCommand()[0];
-		if ((this->tmp)->getCommand()[0] != "exit" && (this->tmp)->getCommand()[0] != "wait")
-			cout << " " << (this->tmp)->getCommand()[1];
+		cout << (this->tmp)->getCommand();
+		if ((this->tmp)->getCommand() != "exit" && (this->tmp)->getCommand() != "wait")
+			cout << " " << (this->tmp)->getArgument();
 		cout << endl;
 	}
 

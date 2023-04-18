@@ -2,17 +2,11 @@
 
 Process::Process()
 {
-	
-}
-
-Process::~Process()
-{
-	delete[] this->code;
 }
 
 Process::Process(string pname)
 {
-	this->pname = pname;
+	this->pname = "init";
 	this->pid = 1;
 	this->ppid = 0;
 	this->pstate = "new";
@@ -37,7 +31,12 @@ Process::Process(string pname)
 	}
 }
 
-Process::Process(string pname, int pid, int ppid)
+Process::~Process()
+{
+	delete[] this->code;
+}
+
+Process::Process(string input, string pname, int pid, int ppid)
 {
 	this->pname = pname;
 	this->pid = pid;
@@ -48,7 +47,7 @@ Process::Process(string pname, int pid, int ppid)
 	this->runtime = 0;
 	this->sleeptime = 0;
 
-	ifstream	file(pname);
+	ifstream	file(input + pname);
 	int	length = 0;				// number of lines in the file(pname)
 	string	line;
 	
@@ -83,7 +82,7 @@ string	Process::readCommand(void)
 	{
 		this->sleep(this->tmpCode[1]);
 	}
-	if (this->tmpCode[0] == "fork_and_exec")
+	if (this->tmpCode[0] == "fork_and_exec" || this->tmpCode[0] == "wait")
 	{
 		this->pc++;
 	}

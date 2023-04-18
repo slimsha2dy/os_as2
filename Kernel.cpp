@@ -7,7 +7,8 @@ Kernel::Kernel(string pname)
 	this->headWq = 0;
 	this->tailWq = 0;
 	this->tmp = 0;
-	this->newProcess = new Process(pname);
+	this->input = pname + "/";
+	this->newProcess = new Process(this->input + "init");
 	this->terProcess = 0;
 
 	this->mode = "kernel";
@@ -106,7 +107,7 @@ void	Kernel::excute(void)
 	// running process command
 	this->mode = "user";
 	string command = (this->tmp)->readCommand();
-	if (command == "exit" || command == "sleep" || command == "fork_and_exec")
+	if (command != "run")
 	{
 		this->syscallFlag = 1;
 		this->syscallCommand = command;
@@ -132,6 +133,13 @@ void	Kernel::syscall(void)
 	// exit
 	if (this->syscallCommand == "exit")
 	{
+		Process *tmp = this->headWq;
+		while (tmp)	// if there is waiting parent, take off the waiting
+		{
+			if ((this->tmp)->getPpid() == tmp->getPid() && tmp->getSleep() == -1)
+				tmp->changeSleep(0);
+			tmp = tmp->getNext();
+		}
 		this->terProcess = this->tmp;
 		this->tmp = 0;
 		this->exitCount++;
@@ -140,11 +148,52 @@ void	Kernel::syscall(void)
 	// fork_and_exec
 	else if (this->syscallCommand == "fork_and_exec")
 	{
-		this->newProcess = new Process((this->tmp)->getCommand()[1], ++this->last_pid, (this->tmp)->getPid());
+		this->newProcess = new Process(this->input, (this->tmp)->getArgument(), ++this->last_pid, (this->tmp)->getPid());
 		(this->tmp)->changeState("ready");
 		this->pushRq(this->tmp);
 		this->tmp = 0;
 	}
 
+	// wait
+	else if (this->syscallCommand == "wait")
+		this->wait();
 	this->syscallFlag = 0;
+}
+
+void	Kernel::wait(void)
+{
+	bool	is_child = 0;
+
+	Process	*tmp = this->headRq;
+	while (tmp)
+	{
+		if (tmp->getPpid() == (this->tmp)->getPid())
+		{
+			is_child = 1;
+			break;
+		}
+		tmp = tmp->getNext();
+	}
+	tmp = this->headWq;
+	while (tmp)
+	{
+		if (tmp->getPpid() == (this->tmp)->getPid())
+		{
+			is_child = 1;
+			break;
+		}
+	}
+	if (is_child)	// if there is child process, push to waiting queue
+	{
+		(this->tmp)->changeSleep(-1);
+		(this->tmp)->changeState("waiting");
+		this->pushWq(this->tmp);
+		this->tmp = 0;
+	}
+	else			// if there is no child, push to ready queue
+	{
+		(this->tmp)->changeState("ready");
+		this->pushRq(this->tmp);
+		this->tmp = 0;
+	}
 }

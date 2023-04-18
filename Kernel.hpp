@@ -14,6 +14,7 @@ class	Kernel
 		Process	*newProcess;	// new process in cycle
 		Process	*terProcess;	// terminated process in cycle
 
+		string	input;
 		string	mode;		// kernel/user
 		string	kstate;		// state of kernel (boot, system call, schedule, idle)
 		bool	syscallFlag;	// if process call syscall
@@ -33,6 +34,7 @@ class	Kernel
 		void	excute(void);		// 4. excute command
 		void	scheduleIdle(void);	// excute scheduler or idle
 		void	syscall(void);
+		void	wait(void);
 
 		// Kernel_util.cpp
 		void	changeKstate(const string kstate);

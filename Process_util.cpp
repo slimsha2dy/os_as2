@@ -5,6 +5,11 @@ int	Process::getPid(void) const
 	return (this->pid);
 }
 
+int	Process::getPpid(void) const
+{
+	return (this->ppid);
+}
+
 void	Process::changeState(const string state)
 {
 	this->pstate = state;
@@ -41,9 +46,14 @@ string	Process::getPstate(void) const
 	return (this->pstate);
 }
 
-string	*Process::getCommand(void)
+string	Process::getCommand(void) const
 {
-	return (this->tmpCode);
+	return (this->tmpCode[0]);
+}
+
+string	Process::getArgument(void) const
+{
+	return (this->tmpCode[1]);
 }
 
 void	Process::subSleep(void)
@@ -54,4 +64,9 @@ void	Process::subSleep(void)
 int	Process::getSleep(void)
 {
 	return (this->sleeptime);
+}
+
+void	Process::changeSleep(int time)
+{
+	this->sleeptime = time;
 }

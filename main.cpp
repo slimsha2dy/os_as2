@@ -3,12 +3,13 @@
 int	main(int argc, char **argv)
 {
 	string	str = argv[1];
-	Kernel	kernel(str + "/init");
+	Kernel	kernel(str);
 	cout << "[cycle #0]" << endl;
 	kernel.printState();
 
 	int	cycle = 1;
-	while (!kernel.getallExit())
+//	while (!kernel.getallExit())
+	while (cycle < 23)
 	{		
 		if (kernel.getSysflag())
 			kernel.checkSyscall();
