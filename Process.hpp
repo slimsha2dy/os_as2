@@ -17,7 +17,7 @@ class	Process
 		string	pstate;	// state of process (new, ready, running, waiting, terminate)
 		string	*code;
 		Process	*next;
-		string	tmpCode;
+		string	tmpCode[2];	// [0]: command, [1]: argument
 		int		pc;
 		int		runtime;	// remaining time to run
 		int		sleeptime;	// remaining time to sleep
@@ -26,6 +26,7 @@ class	Process
 		Process();
 		~Process();
 		Process(string pname);
+		Process(string pname, int pid, int ppid);
 
 		// Process.cpp
 		string	readCommand(void);
@@ -41,7 +42,7 @@ class	Process
 		void	printInfo(void) const;	// print "pid(pname, ppid)"
 		void	printWait(void) const;	// print "pid(S/W)"
 		string	getPstate(void) const;
-		string	getCommand(void) const;
+		string	*getCommand(void);
 		void	subSleep(void);	
 		int		getSleep(void);
 };

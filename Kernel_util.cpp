@@ -12,7 +12,7 @@ bool	Kernel::getSysflag(void) const
 
 bool	Kernel::getallExit(void) const
 {
-	return (this->allExit);
+	return (this->exitCount == this->last_pid);
 }
 
 void	Kernel::printState(void) const
@@ -25,7 +25,12 @@ void	Kernel::printState(void) const
 	if (this->mode == "kernel")
 		cout << this->kstate << endl;
 	else
-		cout << (this->tmp)->getCommand() << endl;
+	{
+		cout << (this->tmp)->getCommand()[0];
+		if ((this->tmp)->getCommand()[0] != "exit" && (this->tmp)->getCommand()[0] != "wait")
+			cout << " " << (this->tmp)->getCommand()[1];
+		cout << endl;
+	}
 
 	// 3. running
 	cout << "3. running: ";

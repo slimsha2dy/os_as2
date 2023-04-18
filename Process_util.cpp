@@ -29,7 +29,7 @@ void	Process::printInfo(void) const
 void	Process::printWait(void) const
 {
 	cout << " " << this->pid << "(";
-	if (this->tmpCode == "wait")
+	if (this->tmpCode[0] == "wait")
 		cout << "W";
 	else
 		cout << "S";
@@ -41,7 +41,7 @@ string	Process::getPstate(void) const
 	return (this->pstate);
 }
 
-string	Process::getCommand(void) const
+string	*Process::getCommand(void)
 {
 	return (this->tmpCode);
 }

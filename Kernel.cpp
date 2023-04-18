@@ -14,7 +14,7 @@ Kernel::Kernel(string pname)
 	this->syscallFlag = 0;
 	this->kstate = "boot";
 	this->last_pid = 1;
-	this->allExit = 0;
+	this->exitCount = 0;
 } 
 
 Kernel::~Kernel(void)
@@ -106,7 +106,7 @@ void	Kernel::excute(void)
 	// running process command
 	this->mode = "user";
 	string command = (this->tmp)->readCommand();
-	if (command == "exit" || command == "sleep")
+	if (command == "exit" || command == "sleep" || command == "fork_and_exec")
 	{
 		this->syscallFlag = 1;
 		this->syscallCommand = command;
@@ -129,11 +129,21 @@ void	Kernel::scheduleIdle(void)
 
 void	Kernel::syscall(void)
 {
+	// exit
 	if (this->syscallCommand == "exit")
 	{
 		this->terProcess = this->tmp;
 		this->tmp = 0;
-		this->allExit = 1;
+		this->exitCount++;
+	}
+
+	// fork_and_exec
+	else if (this->syscallCommand == "fork_and_exec")
+	{
+		this->newProcess = new Process((this->tmp)->getCommand()[1], ++this->last_pid, (this->tmp)->getPid());
+		(this->tmp)->changeState("ready");
+		this->pushRq(this->tmp);
+		this->tmp = 0;
 	}
 
 	this->syscallFlag = 0;

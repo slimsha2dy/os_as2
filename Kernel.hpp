@@ -19,7 +19,7 @@ class	Kernel
 		bool	syscallFlag;	// if process call syscall
 		string	syscallCommand;	// syscall command
 		int		last_pid;
-		bool	allExit;	// if all processes exited
+		int		exitCount;	// if all processes exited
 
 	public:
 		Kernel(string pname);

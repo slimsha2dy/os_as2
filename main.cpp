@@ -2,7 +2,8 @@
 
 int	main(int argc, char **argv)
 {
-	Kernel	kernel(argv[1]);
+	string	str = argv[1];
+	Kernel	kernel(str + "/init");
 	cout << "[cycle #0]" << endl;
 	kernel.printState();
 
