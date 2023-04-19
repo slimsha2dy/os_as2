@@ -1,4 +1,6 @@
 fork_and_exec program1
+fork_and_exec program2
+wait
 sleep 1
 wait
 exit

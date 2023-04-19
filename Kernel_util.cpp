@@ -152,5 +152,7 @@ Process	*Kernel::popWq(Process *p)
 	ret = tmp->getNext();			// ret = p
 	tmp->addNext(ret->getNext());	// a-(p)-b -> a-b
 	ret->addNext(0);
+	if (tmp->getNext() == 0)
+		this->tailWq = tmp;
 	return (ret);
 }
