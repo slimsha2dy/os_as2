@@ -1,6 +1,16 @@
 fork_and_exec program1
 fork_and_exec program2
+run 10
+sleep 5
+run 5
+fork_and_exec program1
+sleep 5
+run 10
+wait
+fork_and_exec program2
+run 5
 wait
 sleep 1
+wait
 wait
 exit

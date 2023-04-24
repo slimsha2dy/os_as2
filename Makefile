@@ -1,7 +1,7 @@
 # Variable
 NAME		= project2
-CXX			= c++
-CXXFLAGS	= -std=c++14
+CXX			= g++
+CXXFLAGS	= -std=c++14 -O3
 RM			= rm -rf
 
 # srcs
@@ -22,11 +22,8 @@ $(NAME) : $(OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean : 
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(NAME)
 
-fclean : clean
-	$(RM) $(NAME)
+re : clean all
 
-re : fclean all
-
-.PHONY : all re fclean clean
+.PHONY : all re clean
