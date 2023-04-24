@@ -1,7 +1,7 @@
 # Variable
 NAME		= project2
 CXX			= g++
-CXXFLAGS	= -std=c++14 -O3
+CXXFLAGS	= -std=c++14
 RM			= rm -rf
 
 # srcs
